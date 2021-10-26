@@ -785,6 +785,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InventoryCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3749347835609666688, guid: 0b667c596ffa1b94ea20e868bf1c0298, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3749347835609666689, guid: 0b667c596ffa1b94ea20e868bf1c0298, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -902,17 +906,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3430989149039464573}
     m_Modifications:
+    - target: {fileID: 6197380717792489654, guid: e1b206f29b3329d40bcbce1adffc039e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -595
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197380717792489654, guid: e1b206f29b3329d40bcbce1adffc039e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 178
+      objectReference: {fileID: 0}
     - target: {fileID: 6297280142822296310, guid: e1b206f29b3329d40bcbce1adffc039e, type: 3}
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6297280142822296310, guid: e1b206f29b3329d40bcbce1adffc039e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -797
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6297280142822296310, guid: e1b206f29b3329d40bcbce1adffc039e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -215
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6297280142822296310, guid: e1b206f29b3329d40bcbce1adffc039e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -986,6 +998,10 @@ PrefabInstance:
     - target: {fileID: 5395119484665452974, guid: 5ca3bd1b1d0dce74fbcd548aab2af64c, type: 3}
       propertyPath: m_Name
       value: ContainerCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5395119484665452974, guid: 5ca3bd1b1d0dce74fbcd548aab2af64c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5395119484665452975, guid: 5ca3bd1b1d0dce74fbcd548aab2af64c, type: 3}
       propertyPath: m_Pivot.x

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Player inventory
+/// </summary>
 public class Inventory : MonoBehaviour
 {
     [SerializeField]
