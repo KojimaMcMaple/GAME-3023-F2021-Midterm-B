@@ -30,12 +30,18 @@ public class ItemSlot : MonoBehaviour, IDropHandler
     //[SerializeField]
     //private TMPro.TextMeshProUGUI itemCountText;
 
+    private bool is_colliding_ = false;
+
     private RectTransform rectt_;
+    private Image image_;
+    private Canvas canvas_ = null;
 
     void Awake()
     {
         //RefreshInfo();
         rectt_ = GetComponent<RectTransform>();
+        image_ = GetComponent<Image>();
+        canvas_ = GetComponentInParent<Canvas>(); //recurses upwards until it finds a GameObject with a matching component. Only components on active GameObjects are matched.
     }
 
     //public void UseItemInSlot()
@@ -74,10 +80,48 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log(transform.name + " dropped");
-        if (eventData.pointerDrag != null)
-        {
-            eventData.pointerDrag.GetComponent<RectTransform>().position = rectt_.position;
-        }
+        //Debug.Log(transform.name + " dropped");
+        //if (eventData.pointerDrag != null)
+        //{
+        //    //eventData.pointerDrag.GetComponent<RectTransform>().position = new Vector3( rectt_.position.x + rectt_.rect.width / 2 * canvas_.scaleFactor, 
+        //    //                                                                            rectt_.position.y - rectt_.rect.height/ 2 * canvas_.scaleFactor );
+
+        //    eventData.pointerDrag.GetComponent<RectTransform>().position = new Vector3(rectt_.position.x,
+        //                                                                                rectt_.position.y);
+        //}
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        is_colliding_ = true;
+        image_.color = Color.green;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        is_colliding_ = false;
+        image_.color = Color.white;
+    }
+
+    public bool IsColliding()
+    {
+        return is_colliding_;
+    }
+
+    public RectTransform GetRectt()
+    {
+        return rectt_;
+    }
+
+    private void OnDrawGizmos()
+    {
+        RectTransform rectt = GetComponent<RectTransform>();
+        Canvas canvas = GetComponentInParent<Canvas>();
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(new Vector3(rectt.position.x, rectt.position.y), 10.0f);
+        //Gizmos.color = Color.blue;
+        //Gizmos.DrawSphere(new Vector3(rectt.position.x + rectt.rect.width/2 * canvas.scaleFactor, rectt.position.y - rectt.rect.height/2 * canvas.scaleFactor), 10.0f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(new Vector3(rectt.position.x - rectt.rect.width / 2 * canvas.scaleFactor, rectt.position.y + rectt.rect.height / 2 * canvas.scaleFactor), 10.0f);
     }
 }

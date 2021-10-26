@@ -46,6 +46,6 @@ public class DragDropBehavior : MonoBehaviour, IPointerDownHandler, IBeginDragHa
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log(transform.name + " dropped");
+        //Debug.Log(transform.name + " dropped");
     }
 }
