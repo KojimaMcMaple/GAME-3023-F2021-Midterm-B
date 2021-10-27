@@ -19,28 +19,34 @@ public class ItemSlotGridDimensioner : MonoBehaviour, IDropHandler
     void Awake()
     {
         int numCells = GridDimensions.x * GridDimensions.y;
-
+        int count = 1;
+        foreach (Transform child in transform)
+        {
+            slot_list_.Add(child.GetComponent<ItemSlot>());
+        }
         while (transform.childCount < numCells)
         {
-            //GameObject newObject = Instantiate(itemSlotPrefab, this.transform);
-            slot_list_.Add(Instantiate(itemSlotPrefab, this.transform).GetComponent<ItemSlot>());
+            GameObject newObject = Instantiate(itemSlotPrefab, this.transform);
+            newObject.name = newObject.name + count;
+            slot_list_.Add(newObject.GetComponent<ItemSlot>());
+            count++;
         }
         canvas_ = GetComponentInParent<Canvas>(); //recurses upwards until it finds a GameObject with a matching component. Only components on active GameObjects are matched.
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log(transform.name + " dropped");
+        //Debug.Log(transform.name + " dropped");
         if (eventData.pointerDrag != null)
         {
             RectTransform slot_rectt = new RectTransform();
             bool has_collision = false;
-            foreach (var slot in slot_list_)
+            for (int i = 0; i < slot_list_.Count; i++)
             {
-                if (slot.IsColliding())
+                if (slot_list_[i].IsColliding())
                 {
                     has_collision = true;
-                    slot_rectt = slot.GetRectt();
+                    slot_rectt = slot_list_[i].GetRectt();
                     break;
                 }
             }
