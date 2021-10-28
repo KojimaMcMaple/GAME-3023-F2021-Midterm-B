@@ -32,9 +32,12 @@ public class DragDropBehavior : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     {
         canvas_group_.alpha = 1.0f;
         canvas_group_.blocksRaycasts = false; //enables raycast to reach itemslots
-        foreach (var slot in item_controller_.GetSlotList())
+        if (item_controller_.GetContainer() != null)
         {
-            slot.SetIsOccupied(false);
+            foreach (var coord in item_controller_.GetSlotList())
+            {
+                item_controller_.GetContainer().GetGrid().GetItemSlotAtCoord(coord.x, coord.y).SetIsOccupied(false);
+            }
         }
     }
 

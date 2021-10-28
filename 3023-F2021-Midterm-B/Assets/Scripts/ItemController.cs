@@ -9,8 +9,8 @@ public class ItemController : MonoBehaviour
     [SerializeField] private Vector2Int grid_dimensions_ = new Vector2Int(1, 3);
     [SerializeField] private Vector2 cell_size_ = new Vector2(96, 96);
     [SerializeField] private GameObject base_item_icon_prefab_;
-    private List<ItemSlot> slot_list_ = new List<ItemSlot>();
-    private int container_id_;
+    [SerializeField] private List<Vector2Int> slot_list_ = new List<Vector2Int>();
+    private ContainerController container_ = null; //parent
 
     private void Start() //depends on Inventory -> itemTable.AssignItemIDs();
     {
@@ -35,8 +35,20 @@ public class ItemController : MonoBehaviour
         return grid_dimensions_;
     }
 
-    public List<ItemSlot> GetSlotList()
+    public List<Vector2Int> GetSlotList()
     {
         return slot_list_;
+    }
+
+    
+
+    public ContainerController GetContainer()
+    {
+        return container_;
+    }
+
+    public void SetContainer(ContainerController value)
+    {
+        container_ = value;
     }
 }
