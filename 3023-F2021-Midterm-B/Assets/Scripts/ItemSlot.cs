@@ -99,10 +99,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         {
             image_.color = Color.green;
         }
-        else
-        {
-            image_.color = Color.red;
-        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -127,6 +123,14 @@ public class ItemSlot : MonoBehaviour, IDropHandler
     public void SetIsOccupied(bool value)
     {
         is_occupied_ = value;
+        if (value)
+        {
+            image_.color = Color.red;
+        }
+        else
+        {
+            image_.color = Color.white;
+        }
     }
 
     public RectTransform GetRectt()

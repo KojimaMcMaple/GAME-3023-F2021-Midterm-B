@@ -27,13 +27,13 @@ public class ItemSlotGridDimensioner : MonoBehaviour, IDropHandler
             count++;
         }
         count = 0;
-        for (int i = 0; i < grid_dimensions_.y; i++)
+        for (int y = 0; y < grid_dimensions_.y; y++)
         {
-            for (int j = 0; j < grid_dimensions_.x; j++)
+            for (int x = 0; x < grid_dimensions_.x; x++)
             {
                 if (count< transform.childCount)
                 {
-                    slot_list_[i, j] = transform.GetChild(count).GetComponent<ItemSlot>();
+                    slot_list_[x, y] = transform.GetChild(count).GetComponent<ItemSlot>();
                     count++;
                 }
             }
@@ -46,18 +46,18 @@ public class ItemSlotGridDimensioner : MonoBehaviour, IDropHandler
         {
             RectTransform slot_rectt = new RectTransform();
             bool has_collision = false;
-            int x = 0, y = 0;
+            int collided_x = 0, collided_y = 0;
 
-            for (int i = 0; i < grid_dimensions_.y; i++)
+            for (int y = 0; y < grid_dimensions_.y; y++)
             {
-                for (int j = 0; j < grid_dimensions_.x; j++)
+                for (int x = 0; x < grid_dimensions_.x; x++)
                 {
-                    if (slot_list_[i, j].IsColliding() && !slot_list_[i, j].IsOccupied())
+                    if (slot_list_[x,y].IsColliding() && !slot_list_[x, y].IsOccupied())
                     {
                         has_collision = true;
-                        y = i;
-                        x = j;
-                        slot_rectt = slot_list_[i,j].GetRectt();
+                        collided_y = y;
+                        collided_x = x;
+                        slot_rectt = slot_list_[x, y].GetRectt();
                         break;
                     }
                 }
@@ -67,17 +67,57 @@ public class ItemSlotGridDimensioner : MonoBehaviour, IDropHandler
             if (has_collision)
             {
                 RectTransform item_rectt = eventData.pointerDrag.GetComponent<RectTransform>();
-                Vector2Int dimensions = eventData.pointerDrag.GetComponent<ItemController>().GetGridDimensions();
-                item_rectt.position = new Vector3((item_rectt.rect.width / 2 - slot_rectt.rect.width / 2) * canvas_.scaleFactor + slot_rectt.position.x,
-                                                    (-item_rectt.rect.height / 2 + slot_rectt.rect.height / 2) * canvas_.scaleFactor + slot_rectt.position.y);
-                for (int i = y; i < y+dimensions.y; i++)
+                ItemController item_controller = eventData.pointerDrag.GetComponent<ItemController>();
+                if (CanPlaceOnSlots(collided_x, collided_y, item_controller))
                 {
-                    for (int j = x; j < x+dimensions.x; j++)
+                    List<ItemSlot> item_slot_list = item_controller.GetSlotList();
+                    if (item_slot_list.Count != 0)
                     {
-                        slot_list_[i, j].SetIsOccupied(true);
+                        foreach (var slot in item_slot_list)
+                        {
+                            slot.SetIsOccupied(false);
+                        }
                     }
+                    item_slot_list.Clear();
+                    for (int y = collided_y; y < collided_y + item_controller.GetGridDimensions().y; y++)
+                    {
+                        for (int x = collided_x; x < collided_x + item_controller.GetGridDimensions().x; x++)
+                        {
+                            slot_list_[x, y].SetIsOccupied(true);
+                            item_slot_list.Add(slot_list_[x, y]);
+                        }
+                    }
+                    item_rectt.position = new Vector3((item_rectt.rect.width / 2 - slot_rectt.rect.width / 2) * canvas_.scaleFactor + slot_rectt.position.x,
+                                                    (-item_rectt.rect.height / 2 + slot_rectt.rect.height / 2) * canvas_.scaleFactor + slot_rectt.position.y);
                 }
             }
         }
+    }
+
+    private bool CanPlaceOnSlots(int collided_x, int collided_y, ItemController item_controller)
+    {
+        if (slot_list_[collided_x, collided_y].IsOccupied())
+        {
+            Debug.Log("slot_list_["+ collided_x + ", "+ collided_y + "].IsOccupied()");
+            return false;
+        }
+        if (collided_y + item_controller.GetGridDimensions().y - 1 >= slot_list_.GetLength(0) ||
+            collided_x + item_controller.GetGridDimensions().x - 1 >= slot_list_.GetLength(1))
+        {
+            Debug.Log("GetLength");
+            return false;
+        }
+        for (int y = collided_y; y < collided_y + item_controller.GetGridDimensions().y; y++)
+        {
+            for (int x = collided_x; x < collided_x + item_controller.GetGridDimensions().x; x++)
+            {
+                if (slot_list_[x, y].IsOccupied())
+                {
+                    Debug.Log("slot_list_[" + x + ", " + y + "].IsOccupied()");
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

@@ -9,6 +9,7 @@ public class DragDropBehavior : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     private Canvas canvas_ = null;
     private RectTransform rectt_;
     private CanvasGroup canvas_group_; //enables dropping into itemslots
+    private ItemController item_controller_;
 
     void Awake()
     {
@@ -19,6 +20,7 @@ public class DragDropBehavior : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         {
             Debug.LogError("> KH_ERR: No Canvas component found in parents for " + transform.name);
         }
+        item_controller_ = GetComponent<ItemController>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -30,6 +32,10 @@ public class DragDropBehavior : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     {
         canvas_group_.alpha = 1.0f;
         canvas_group_.blocksRaycasts = false; //enables raycast to reach itemslots
+        foreach (var slot in item_controller_.GetSlotList())
+        {
+            slot.SetIsOccupied(false);
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
