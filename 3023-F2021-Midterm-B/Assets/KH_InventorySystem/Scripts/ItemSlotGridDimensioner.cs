@@ -50,9 +50,9 @@ public class ItemSlotGridDimensioner : MonoBehaviour, IDropHandler
             {
                 RectTransform item_rectt = eventData.pointerDrag.GetComponent<RectTransform>();
                 ItemController item_controller = eventData.pointerDrag.GetComponent<ItemController>();
+                List<Vector2Int> item_slot_list = item_controller.GetSlotList();
                 if (CanPlaceOnSlots(collided_x, collided_y, item_controller))
                 {
-                    List<Vector2Int> item_slot_list = item_controller.GetSlotList();
                     // CLEAR PREV SLOTS
                     if (item_controller.GetContainer() != null)
                     {
@@ -80,6 +80,17 @@ public class ItemSlotGridDimensioner : MonoBehaviour, IDropHandler
                     container_.AddItemToContainer(item_controller);
                     item_rectt.position = new Vector3((item_rectt.rect.width / 2 - slot_rectt.rect.width / 2) * canvas_.scaleFactor + slot_rectt.position.x,
                                                     (-item_rectt.rect.height / 2 + slot_rectt.rect.height / 2) * canvas_.scaleFactor + slot_rectt.position.y);
+                }
+                else
+                {
+                    // RETURN ITEM TO PREV SLOT
+                    if (item_controller.GetContainer() != null)
+                    {
+                        if (item_slot_list.Count != 0)
+                        {
+                            item_controller.GetContainer().GetGrid().SetItemAtSlotCoord(item_controller, item_slot_list[0].x, item_slot_list[0].y);
+                        }
+                    }
                 }
             }
         }
