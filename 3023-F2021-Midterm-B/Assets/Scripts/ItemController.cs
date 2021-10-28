@@ -10,9 +10,10 @@ public class ItemController : MonoBehaviour
     [SerializeField] private Vector2 cell_size_ = new Vector2(96, 96);
     [SerializeField] private GameObject base_item_icon_prefab_;
 
-    private void Awake()
+    private void Start() //depends on Inventory -> itemTable.AssignItemIDs();
     {
-        SetupItem();
+        //SetupItem();
+        Debug.Log(">>> " + item_stats_.Id);
     }
 
     public void SetupItem()
@@ -21,9 +22,14 @@ public class ItemController : MonoBehaviour
         BoxCollider2D collider = GetComponent<BoxCollider2D>();
         rectt.sizeDelta = new Vector2(cell_size_.x * grid_dimensions_.x, cell_size_.y * grid_dimensions_.y);
         collider.size = new Vector2(cell_size_.x * grid_dimensions_.x, cell_size_.y * grid_dimensions_.y);
-        //GameObject icon_obj = Instantiate(base_item_icon_prefab_, this.transform);        
-        GameObject icon_obj = transform.Find("ItemIcon").gameObject;
+        GameObject icon_obj = Instantiate(base_item_icon_prefab_, this.transform);
+        //GameObject icon_obj = transform.Find("ItemIcon").gameObject;
         icon_obj.GetComponent<RectTransform>().sizeDelta = new Vector2(cell_size_.x * grid_dimensions_.x, cell_size_.y * grid_dimensions_.y);
         icon_obj.GetComponent<Image>().sprite = item_stats_.icon;
+    }
+
+    public Vector2Int GetGridDimensions()
+    {
+        return grid_dimensions_;
     }
 }

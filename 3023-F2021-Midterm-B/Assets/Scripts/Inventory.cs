@@ -13,7 +13,7 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     ItemTable itemTable;
 
-    private void Start()
+    private void Awake()
     {
         itemTable.AssignItemIDs();
     }

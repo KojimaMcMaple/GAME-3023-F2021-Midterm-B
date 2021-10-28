@@ -9,21 +9,21 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 {
     //https://youtu.be/BGr-7GZJNXg - Simple Drag Drop (Unity Tutorial for Beginners)
 
-    //public Item itemInSlot = null;
+    public Item itemInSlot = null;
 
-    //[SerializeField]
-    //private int itemCount = 0;
-    //public int ItemCount
-    //{
-    //    get
-    //    {
-    //        return itemCount;
-    //    }
-    //    set
-    //    {
-    //        itemCount = value;
-    //    }
-    //}
+    [SerializeField]
+    private int itemCount = 0;
+    public int ItemCount
+    {
+        get
+        {
+            return itemCount;
+        }
+        set
+        {
+            itemCount = value;
+        }
+    }
 
     //[SerializeField]
     //private Image icon;
@@ -31,6 +31,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
     //private TMPro.TextMeshProUGUI itemCountText;
 
     private bool is_colliding_ = false;
+    private bool is_occupied_ = false;
 
     private RectTransform rectt_;
     private Image image_;
@@ -94,18 +95,38 @@ public class ItemSlot : MonoBehaviour, IDropHandler
     private void OnTriggerStay2D(Collider2D collision)
     {
         is_colliding_ = true;
-        image_.color = Color.green;
+        if (!is_occupied_)
+        {
+            image_.color = Color.green;
+        }
+        else
+        {
+            image_.color = Color.red;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         is_colliding_ = false;
-        image_.color = Color.white;
+        if (!is_occupied_)
+        {
+            image_.color = Color.white;
+        }
     }
 
     public bool IsColliding()
     {
         return is_colliding_;
+    }
+
+    public bool IsOccupied()
+    {
+        return is_occupied_;
+    }
+
+    public void SetIsOccupied(bool value)
+    {
+        is_occupied_ = value;
     }
 
     public RectTransform GetRectt()
@@ -122,6 +143,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         //Gizmos.color = Color.blue;
         //Gizmos.DrawSphere(new Vector3(rectt.position.x + rectt.rect.width/2 * canvas.scaleFactor, rectt.position.y - rectt.rect.height/2 * canvas.scaleFactor), 10.0f);
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(new Vector3(rectt.position.x - rectt.rect.width / 2 * canvas.scaleFactor, rectt.position.y + rectt.rect.height / 2 * canvas.scaleFactor), 10.0f);
+        Gizmos.DrawSphere(new Vector3(rectt.position.x - rectt.rect.width / 2 * canvas.scaleFactor, rectt.position.y + rectt.rect.height / 2 * canvas.scaleFactor), 5.0f);
     }
 }
